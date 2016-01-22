@@ -29,21 +29,16 @@ module.exports = {
     run: function(step, dexter) {
         var inputs = util.pickInputs(step, pickInputs),
             validateErrors = util.checkValidateErrors(inputs, pickInputs),
-            token = dexter.environment('bitly_access_token'),
+            token = dexter.provider('bitly').credentials('access_token'),
             api = '/v3/organization/popular_links';
-
-        if (!token)
-            return this.fail('A [bitly_access_token] environment variable is required for this module');
 
         if (validateErrors)
             return this.fail(validateErrors);
 
         inputs.access_token = token;
         request.get({uri: api, qs: inputs, json: true}, function (error, response, body) {
-            if (error)
-                this.fail(error);
-            else if (body && body.status_code !== 200)
-                this.fail(body);
+            if (error || (body && body.status_code !== 200))
+                this.fail(error || body);
             else
                 this.complete(util.pickOutputs(body, pickOutputs));
         }.bind(this));

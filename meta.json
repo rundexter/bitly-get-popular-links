@@ -52,5 +52,9 @@
             "title":"Org Clicks"
         }
     ],
+    "providers": [{
+        "name": "bitly"
+    }],
+    "icon": "dex-bitly",
     "title": "Bitly: Get Org Popular Links" /* Required.A display name for the module */
 }
